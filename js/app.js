@@ -89,13 +89,13 @@ function handleProductClick(event){
   }
 
   clicks++;
-  let clickedGoat = event.target.alt;
-  for (let i = 0; i < allGoats.length; i++){
-    if (clickedGoat === allGoats[i].name){
-      allGoats[i].clicks++;
+  let clickedProduct = event.target.alt;
+  for (let i = 0; i < allProducts.length; i++){
+    if (clickedProduct === allProducts[i].name){
+      allProducts[i].clicks++;
     }
   }
-  renderRandomGoats();
+  renderRandomProducts();
 
   if(clicks === clicksAllowed){
     myContainer.removeEventListener('click', handleProductClick);
@@ -104,9 +104,9 @@ function handleProductClick(event){
 
 function renderResults(){
   let ul = document.querySelector('ul');
-  for(let i = 0; i < allGoats.length; i++){
+  for(let i = 0; i < allProducts.length; i++){
     let li = document.createElement('li');
-    li.textContent = `${allGoats[i].name} had ${allGoats[i].views} views and was clicked ${allGoats[i].clicks} times.`;
+    li.textContent = `${allProducts[i].name} had ${allProducts[i].views} views and was clicked ${allProducts[i].clicks} times.`;
     ul.appendChild(li);
   }
 }
@@ -117,7 +117,7 @@ function handleButtonClick(event){ //eslint-disable-line
   }
 }
 
-renderRandomGoats();
+renderRandomProducts();
 
 
 myContainer.addEventListener('click', handleProductClick);

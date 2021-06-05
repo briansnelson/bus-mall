@@ -23,40 +23,37 @@ function makeProduct(product, fileExtension = 'jpg') {
   this.views = 0;
   allProducts.push(this);
 }
+let retrievedProducts = localStorage.getItem('products');
+if(retrievedProducts){
+  let parsedProducts = JSON.parse(retrievedProducts);
+  allProducts = parsedProducts;
+} else {
+  new makeProduct('bag');
+  new makeProduct('banana');
+  new makeProduct('bathroom');
+  new makeProduct('boots');
+  new makeProduct('breakfast');
+  new makeProduct('bubblegum');
+  new makeProduct('chair');
+  new makeProduct('cthulhu');
+  new makeProduct('dog-duck');
+  new makeProduct('dragon');
+  new makeProduct('pen');
+  new makeProduct('pet-sweep');
+  new makeProduct('scissors');
+  new makeProduct('shark');
+  new makeProduct('sweep', 'png');
+  new makeProduct('tauntaun');
+  new makeProduct('unicorn');
+  new makeProduct('water-can');
+  new makeProduct('wine-glass');
+}
 
-// eslint-disable-next-line new-cap
-new makeProduct('bag');
-new makeProduct('banana');
-new makeProduct('bathroom');
-new makeProduct('boots');
-new makeProduct('breakfast');
-new makeProduct('bubblegum');
-new makeProduct('chair');
-new makeProduct('cthulhu');
-new makeProduct('dog-duck');
-new makeProduct('dragon');
-new makeProduct('pen');
-new makeProduct('pet-sweep');
-new makeProduct('scissors');
-new makeProduct('shark');
-new makeProduct('sweep', 'png');
-new makeProduct('tauntaun');
-new makeProduct('unicorn');
-new makeProduct('water-can');
-new makeProduct('wine-glass');
 
-
-// some validation
-// imageOne.src = allGoats[0].src;
-// imageTwo.src = allGoats[1].src;
-// allGoats[0].views++;
 
 function selectRandomProductIndex() {
   return Math.floor(Math.random() * allProducts.length);
 }
-// let productOne = selectRandomProductIndex();
-// let productTwo = selectRandomProductIndex();
-// let productThree = selectRandomProductIndex();
 
 function renderRandomProducts() {
 
@@ -102,6 +99,8 @@ function handleProductClick(event) {
   if (clicks === clicksAllowed) {
     myContainer.removeEventListener('click', handleProductClick);
     renderChart();
+    let stringifiedProducts = JSON.stringify(allProducts);
+    localStorage.setItem('products', stringifiedProducts);
   }
 }
 

@@ -7,8 +7,6 @@ let clicks = 0;
 let clicksAllowed = 25;
 let productValidation = [];
 let renderLineUp = [];
-
-
 let myContainer = document.querySelector('section');
 let myButton = document.querySelector('div');
 let imageOne = document.getElementById('imageOne');
@@ -56,20 +54,23 @@ new makeProduct('wine-glass');
 function selectRandomProductIndex() {
   return Math.floor(Math.random() * allProducts.length);
 }
+// let productOne = selectRandomProductIndex();
+// let productTwo = selectRandomProductIndex();
+// let productThree = selectRandomProductIndex();
 
 function renderRandomProducts() {
-  let productOne = selectRandomProductIndex();
-  let productTwo = selectRandomProductIndex();
-  let productThree = selectRandomProductIndex();
-  // seriously consider using an array. 
-  // remember:  how do you know if an array inculdes something? maybe google
+
   while (productValidation.length < 6) {
     let uniqueProduct = selectRandomProductIndex();
     while (!productValidation.includes(uniqueProduct)) {
       productValidation.push(uniqueProduct);
     }
   }
-  console.log(productValidation);
+  let productOne = productValidation.shift();
+  let productTwo = productValidation.shift();
+  let productThree = productValidation.shift();
+
+  // console.log(productValidation);
 
   imageOne.src = allProducts[productOne].src;
   imageOne.alt = allProducts[productOne].name;
@@ -84,110 +85,119 @@ function renderRandomProducts() {
   allProducts[productThree].views++;
 }
 
-function handleProductClick(event){
-  if(event.target === myContainer){
+function handleProductClick(event) {
+  if (event.target === myContainer) {
     alert('click on an IMAGE please');
   }
-
   clicks++;
   let clickedProduct = event.target.alt;
-  for (let i = 0; i < allProducts.length; i++){
-    if (clickedProduct === allProducts[i].name){
+  for (let i = 0; i < allProducts.length; i++) {
+    if (clickedProduct === allProducts[i].name) {
       allProducts[i].clicks++;
     }
   }
   renderRandomProducts();
+  // console.log('test');
 
-  if(clicks === clicksAllowed){
+  if (clicks === clicksAllowed) {
     myContainer.removeEventListener('click', handleProductClick);
+    renderChart();
   }
 }
 
-function renderResults(){
+function renderResults() {
   let ul = document.querySelector('ul');
-  for(let i = 0; i < allProducts.length; i++){
+  for (let i = 0; i < allProducts.length; i++) {
     let li = document.createElement('li');
     li.textContent = `${allProducts[i].name} had ${allProducts[i].views} views and was clicked ${allProducts[i].clicks} times.`;
     ul.appendChild(li);
   }
 }
 
-function handleButtonClick(event){ //eslint-disable-line
-  if(clicks === clicksAllowed){
+function handleButtonClick(event) { //eslint-disable-line
+  if (clicks === clicksAllowed) {
     renderResults();
   }
 }
-// function renderChart() {
+
+function renderChart() {
   let clicksArray = [];
   let viewsArray = [];
   let productsArray = [];
+  for (let i = 0; i < allProducts.length; i++) {
+    clicksArray.push(allProducts[i].clicks);
+    viewsArray.push(allProducts[i].views);
+    productsArray.push(allProducts[i].product);
+  }
+  let ctx = document.getElementById('myChart').getContext('2d');
+  let myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: productsArray,
+      datasets: [{
+        label: '# of Votes',
+        data: clicksArray,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      },
+      {
+        label: '# of Views',
+        data: viewsArray,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
 
-//   for (let i = 0; i <allProducts.length; i++){
-//     clicksArray.push(allProducts[i].clicks);
-//     viewsArray.push(allProducts[i].views);
-//     productsArray.push(allProducts[i].product);
-//   }
+
 // console.log('${clicksarray} 
 // ${viewsArray} 
 // ${productsArray}`);
 
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: productsArray,
-        datasets: [{
-            label: '# of Votes',
-            data: clicksArray,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        },
-        {
-            label: '# of Views',
-            data: viewsArray,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1}]
-        },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
 
 renderRandomProducts();
 
 myContainer.addEventListener('click', handleProductClick);
 myButton.addEventListener('click', handleButtonClick);
+// imageOne.addEventListener('click', handleProductClick);
+// imageTwo.addEventListener('click', handleProductClick);
+// imageThree.addEventListener('click', handleProductClick);
+
